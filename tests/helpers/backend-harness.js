@@ -92,7 +92,7 @@ async function startBackend() {
     const port = await getFreePort();
     const baseUrl = 'http://127.0.0.1:' + port;
     let log = '';
-    child = spawn(process.execPath, ['server.js'], {
+    child = spawn(process.execPath, ['--require', path.join(__dirname, 'loopback-preload.js'), 'server.js'], {
       cwd: dir,
       env: Object.assign({}, process.env, { PORT: String(port) }),
       stdio: ['ignore', 'pipe', 'pipe']
