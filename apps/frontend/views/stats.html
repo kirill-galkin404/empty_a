@@ -1,0 +1,26 @@
+<h3>Stats</h3>
+<div class="row" ng-show="stats">
+  <div class="col-sm-3">
+    <div class="panel panel-default stat"><div class="panel-body"><h2>{{stats.total}}</h2>Total</div></div>
+  </div>
+  <div class="col-sm-3">
+    <div class="panel panel-success stat"><div class="panel-body"><h2>{{stats.done}}</h2>Done</div></div>
+  </div>
+  <div class="col-sm-3">
+    <div class="panel panel-warning stat"><div class="panel-body"><h2>{{stats.dueToday}}</h2>Due today</div></div>
+  </div>
+  <div class="col-sm-3">
+    <div class="panel panel-danger stat"><div class="panel-body"><h2>{{stats.overdue}}</h2>Overdue</div></div>
+  </div>
+</div>
+
+<h4>Progress</h4>
+<div class="progress">
+  <div class="progress-bar progress-bar-success" ng-style="{width: stats.percentDone + '%'}">{{stats.percentDone}}%</div>
+</div>
+
+<h4>Tags</h4>
+<table class="table table-condensed table-striped" style="width: 300px">
+  <tr ng-repeat="t in tagList"><td>#{{t.name}}</td><td class="text-right">{{t.count}}</td></tr>
+  <tr ng-show="tagList.length == 0"><td class="text-muted">No tags yet</td></tr>
+</table>
