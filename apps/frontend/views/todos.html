@@ -1,0 +1,121 @@
+<div class="row">
+  <!-- sidebar with lists -->
+  <div class="col-md-3">
+    <div class="list-group">
+      <a href="" class="list-group-item" ng-repeat="list in lists"
+         ng-class="{active: selectedList.id == list.id}" ng-click="selectList(list)">
+        <span class="list-color" ng-style="{'background-color': list.color}"></span>
+        {{list.name}}
+        <span class="badge">{{list.total - list.done}}</span>
+      </a>
+    </div>
+    <button class="btn btn-default btn-sm btn-block" ng-click="openNewList()">
+      <span class="glyphicon glyphicon-plus"></span> New list
+    </button>
+    <button class="btn btn-link btn-sm btn-block text-danger" ng-show="selectedList && selectedList.name != 'Inbox'" ng-click="deleteList(selectedList)">
+      Delete this list
+    </button>
+  </div>
+
+  <div class="col-md-9">
+    <h3>{{selectedList.name}} <small>{{selectedList.done}} / {{selectedList.total}} done</small></h3>
+
+    <!-- add form -->
+    <form class="well well-sm add-form" ng-submit="addTodo()">
+      <div class="row">
+        <div class="col-sm-5">
+          <input type="text" class="form-control" placeholder="What needs to be done?" ng-model="newTodo.title">
+        </div>
+        <div class="col-sm-2">
+          <select class="form-control" ng-model="newTodo.priority" ng-options="p as (p | priorityLabel) for p in [1,2,3]"></select>
+        </div>
+        <div class="col-sm-2">
+          <input type="date" class="form-control" ng-model="newTodo.due_date">
+        </div>
+        <div class="col-sm-2">
+          <input type="text" class="form-control" placeholder="tags" ng-model="newTodo.tagsText">
+        </div>
+        <div class="col-sm-1">
+          <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+      </div>
+    </form>
+
+    <!-- filters -->
+    <form class="form-inline filters" ng-submit="applyFilter()">
+      <input type="text" class="form-control input-sm" placeholder="Search..." ng-model="filter.q">
+      <select class="form-control input-sm" ng-model="filter.done" ng-change="applyFilter()">
+        <option value="">All</option>
+        <option value="0">Active</option>
+        <option value="1">Completed</option>
+      </select>
+      <select class="form-control input-sm" ng-model="filter.sort" ng-change="applyFilter()">
+        <option value="">Newest</option>
+        <option value="due">Due date</option>
+        <option value="priority">Priority</option>
+      </select>
+      <span class="label label-primary" ng-show="filter.tag">
+        #{{filter.tag}} <a href="" ng-click="filterByTag('')" class="tag-clear">&times;</a>
+      </span>
+      <button type="submit" class="btn btn-default btn-sm">Search</button>
+      <div class="pull-right">
+        <button type="button" class="btn btn-default btn-sm" ng-click="completeAll()">Complete all</button>
+        <button type="button" class="btn btn-default btn-sm" ng-click="clearDone()">Clear completed</button>
+      </div>
+    </form>
+
+    <div ng-show="loading" class="text-muted">Loading...</div>
+
+    <ul class="list-group todo-list">
+      <li class="list-group-item" ng-repeat="todo in todos" ng-class="{'todo-done': todo.done, 'todo-overdue': todo.overdue}">
+        <input type="checkbox" ng-model="todo.done" ng-change="toggle(todo)">
+        <span class="todo-title" ng-dblclick="edit(todo)">{{todo.title}}</span>
+        <span class="label" ng-class="priorityClass(todo)">{{todo.priority | priorityLabel}}</span>
+        <a href="" class="tag" ng-repeat="tag in todo.tags" ng-click="filterByTag(tag)">#{{tag}}</a>
+        <span class="text-muted small" ng-show="todo.due_date">
+          due {{todo.due_date | prettyDate}}<span ng-show="todo.overdue" class="text-danger"> (overdue)</span>
+        </span>
+        <div class="pull-right">
+          <a href="" ng-click="edit(todo)"><span class="glyphicon glyphicon-pencil"></span></a>
+          <a href="" ng-click="remove(todo)" class="text-danger"><span class="glyphicon glyphicon-trash"></span></a>
+        </div>
+        <div class="todo-notes text-muted small" ng-show="todo.notes">{{todo.notes}}</div>
+      </li>
+      <li class="list-group-item text-muted" ng-show="!loading && todos.length == 0">Nothing here.</li>
+    </ul>
+
+    <ul class="pager">
+      <li class="previous" ng-class="{disabled: page == 1}"><a href="" ng-click="prevPage()">&larr; Prev</a></li>
+      <li><span>Page {{page}}</span></li>
+      <li class="next" ng-class="{disabled: todos.length < 20}"><a href="" ng-click="nextPage()">Next &rarr;</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- new list modal -->
+<div class="modal fade" id="newListModal" tabindex="-1">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <form ng-submit="createList()">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">New list</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" class="form-control" ng-model="newList.name" required>
+          </div>
+          <div class="form-group">
+            <label>Color</label>
+            <input type="color" class="form-control" ng-model="newList.color">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
