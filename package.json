@@ -1,0 +1,14 @@
+{
+  "name": "todo-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Root scripts delegating to apps/backend and apps/frontend",
+  "scripts": {
+    "install:all": "npm --prefix apps/backend install && npm --prefix apps/frontend install",
+    "seed": "npm --prefix apps/backend run seed",
+    "start:api": "npm --prefix apps/backend start",
+    "start:web": "npm --prefix apps/frontend start",
+    "dev": "node scripts/dev.js",
+    "test": "node --test tests/*.test.js"
+  }
+}
