@@ -1,0 +1,22 @@
+{
+  "name": "todo-backend",
+  "version": "0.3.1",
+  "description": "Todo app REST API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "seed": "node seed.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.6.1",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "lodash": "^4.17.11",
+    "md5": "^2.2.1",
+    "moment": "^2.22.2",
+    "morgan": "^1.9.1",
+    "sqlite3": "^5.1.7"
+  }
+}
